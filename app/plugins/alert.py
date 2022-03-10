@@ -13,17 +13,14 @@ v = vanitas()
 
 
 def is_blacklisted(user):
-    res = get("https://vanitas-api.up.railway.app/user/" + str(user)).json()
-    return True if res['blacklisted'] else False
+    res = get(f"https://vanitas-api.up.railway.app/user/{str(user)}").json()
+    return bool(res['blacklisted'])
 
 
 def is_admin(group_id: int, user_id: int):
     try:
         user_data = bot.get_chat_member(group_id, user_id)
-        if user_data.status == 'administrator' or user_data.status == 'creator':
-            return True
-        else:
-            return False
+        return user_data.status in ['administrator', 'creator']
     except:
         return False
 
@@ -121,5 +118,3 @@ def alert(_, m: Message):
                                          callback_data=f"mute:mute:{user}")
                 ],
             ]))
-    else:
-        pass
